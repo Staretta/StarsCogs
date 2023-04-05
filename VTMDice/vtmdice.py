@@ -26,7 +26,7 @@ class VTMDice(commands.Cog):
         # I don't know how to do the optional comment thing. x.x
         # comment, if available.
         # embed.add_field(name="Comment", value="-", inline=False)
-        await ctx.send(mention_author=True, embed=embed)
+        await ctx.send(f"{ctx.message.author.mention}", embed=embed)
 
     @staticmethod
     def roll_status(dice_pool, hunger, difficulty):
@@ -113,7 +113,7 @@ class VTMDice(commands.Cog):
             else:
                 string += cf.strikethrough(f'{array[n]}')
             if n < loop_num - 1:
-                string += ','
+                string += ', '
 
         # if for some reason the Hunger Dice are 0, or the Pool is 0, return a dash.
         if string == "":
