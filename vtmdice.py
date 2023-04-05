@@ -14,7 +14,7 @@ class VTMDice(commands.Cog):
         # todo throw an error if hunger is greater than the pool.
         dice_pool = self.roll_dice(pool, 10)
         embed = discord.Embed(title=f"{ctx.message.author.name}'s Roll")
-        # if status to show success/failure
+        # status of the roll
         status = self.roll_status(dice_pool, hunger, difficulty)
         embed.add_field(name=f"{status[1]}", value=f"({status[0]})", inline=True)
         # normal dice
@@ -22,6 +22,7 @@ class VTMDice(commands.Cog):
         # hunger dice
         embed.add_field(name="Hunger Dice", value=self.format_dice(dice_pool, pool, hunger, True), inline=False)
         # show dice
+        # some kind of image generation wizardry here
         # I don't know how to do the optional comment thing. x.x
         # comment, if available.
         # embed.add_field(name="Comment", value="-", inline=False)
@@ -29,7 +30,7 @@ class VTMDice(commands.Cog):
 
     @staticmethod
     def roll_status(dice_pool, hunger, difficulty):
-        # how split a list in python? x.x
+        # we want to preserve the array, so lets make a deep copy. I probably don't need to do this.
         array = copy.deepcopy(dice_pool)
 
         total_successes = 0
@@ -65,7 +66,7 @@ class VTMDice(commands.Cog):
 
         # If our total crits are more than 1, we know there is a pair of them, but not where.
         if total_crits > 1:
-            # If we have more at least 1 pair of regular crits, it's not a messy critical.
+            # If we have at least 1 hunger crit, then the whole thing is a messy crit. V5 pg 205-206
             if hunger_criticals > 0:
                 status = "Messy Critical"
             else:
@@ -74,7 +75,7 @@ class VTMDice(commands.Cog):
             status = "Success"
         else:
             # At this point, if it's not a success, or a crit, it's a failure. What kind of failure?
-            # Check if it's a Bestial Failure
+            # Check if it's a Bestial Failure. V5 pg 207
             if bestial_failures > 0:
                 status = "Bestial Failure"
             else:
